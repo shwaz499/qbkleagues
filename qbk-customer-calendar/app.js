@@ -19,11 +19,22 @@
     { key: "middle", label: "Middle Court" },
     { key: "right", label: "Right Court" },
   ];
+  const FILTER_KEYS = [
+    "adultClasses",
+    "availableRentals",
+    "privateEventsRentals",
+    "youthClasses",
+    "adultDropIns",
+    "teenDropIns",
+  ];
+  const filterState = Object.fromEntries(FILTER_KEYS.map((key) => [key, true]));
   const els = {
     date: document.getElementById("event-date"),
     prevDay: document.getElementById("prev-day"),
     nextDay: document.getElementById("next-day"),
     todayDay: document.getElementById("today-day"),
+    clearFilters: document.getElementById("clear-filters"),
+    filterMenu: document.getElementById("filter-menu"),
     dayGrid: document.getElementById("day-grid"),
     dayViewTitle: document.getElementById("day-view-title"),
     timeTrack: document.getElementById("time-track"),
@@ -33,6 +44,57 @@
     vacancyOverlay: document.getElementById("vacancy-overlay"),
     eventsOverlay: document.getElementById("events-overlay"),
   };
+
+  function applyEventFilters() {
+    const items = document.querySelectorAll("[data-filter-category]");
+    items.forEach((node) => {
+      const key = node.dataset.filterCategory;
+      const visible = !!filterState[key];
+      node.style.display = visible ? "" : "none";
+    });
+  }
+
+  function updateFilterChipState() {
+    if (!els.filterMenu) return;
+    const chips = els.filterMenu.querySelectorAll(".filter-chip[data-filter-key]");
+    chips.forEach((chip) => {
+      const key = chip.dataset.filterKey;
+      const selected = !!filterState[key];
+      chip.classList.toggle("is-active", selected);
+      chip.classList.toggle("is-inactive", !selected);
+      chip.setAttribute("aria-pressed", selected ? "true" : "false");
+    });
+  }
+
+  function clearAllFilters() {
+    FILTER_KEYS.forEach((key) => {
+      filterState[key] = false;
+    });
+    updateFilterChipState();
+    applyEventFilters();
+  }
+
+  function setupFilterControls() {
+    if (els.filterMenu) {
+      els.filterMenu.addEventListener("click", (event) => {
+        const target = event.target.closest(".filter-chip[data-filter-key]");
+        if (!target) return;
+        const key = target.dataset.filterKey;
+        if (!Object.prototype.hasOwnProperty.call(filterState, key)) return;
+        filterState[key] = !filterState[key];
+        updateFilterChipState();
+        applyEventFilters();
+      });
+    }
+
+    if (els.clearFilters) {
+      els.clearFilters.addEventListener("click", () => {
+        clearAllFilters();
+      });
+    }
+
+    updateFilterChipState();
+  }
 
   function formatShortDate(dateString) {
     const date = new Date(`${dateString}T00:00:00`);
@@ -302,6 +364,17 @@
       const isTeenDropIn = titleText === "teen drop in"
         || (/\bteens?\b/.test(titleText) && /drop[\s-]*in/.test(titleText));
       const isTeenGlowParty = /glow[\s-]*in[\s-]*the[\s-]*dark[\s-]*party/.test(titleText);
+      const isLeagueOrGame = categoryText.includes("league") || categoryText.includes("game");
+      const isYouthClass = titleText.includes("junior classes")
+        || titleText.includes("cubs")
+        || titleText.includes("seals")
+        || titleText.includes("beach lions");
+      const isAdultDropIn = !isTeenDropIn
+        && !isTeenGlowParty
+        && (categoryText.includes("drop-in") || categoryText.includes("drop in"));
+      const isPrivateEventOrRental = titleText.includes("private event")
+        || titleText.includes("private rental")
+        || (!event.clickable && (categoryText.includes("rental") || categoryText.includes("block")));
       if (categoryText.includes("league") || categoryText.includes("game")) {
         card.classList.add("day-event-league");
       }
@@ -318,6 +391,19 @@
       }
       if (titleText.includes("junior classes")) {
         card.classList.add("day-event-junior");
+      }
+      if (isTeenDropIn || isTeenGlowParty) {
+        card.dataset.filterCategory = "teenDropIns";
+      } else if (isYouthClass) {
+        card.dataset.filterCategory = "youthClasses";
+      } else if (isAdultDropIn) {
+        card.dataset.filterCategory = "adultDropIns";
+      } else if (isPrivateEventOrRental || isLeagueOrGame) {
+        card.dataset.filterCategory = "privateEventsRentals";
+      } else if (isAdultClass || isFreeTrialClass || event.clickable) {
+        card.dataset.filterCategory = "adultClasses";
+      } else {
+        card.dataset.filterCategory = "privateEventsRentals";
       }
       if (event.clickable) {
         card.href = event.bookingUrl;
@@ -390,9 +476,12 @@
         rent.style.top = `${top + 1}px`;
         rent.style.height = `${height}px`;
         rent.textContent = "Rent Court";
+        rent.dataset.filterCategory = "availableRentals";
         els.vacancyOverlay.appendChild(rent);
       }
     }
+
+    applyEventFilters();
   }
 
   function fetchEventsFrom(url) {
@@ -449,6 +538,7 @@
   }
 
   function init() {
+    setupFilterControls();
     els.date.value = getTodayISO();
     els.date.addEventListener("change", function () { loadAndRender(); });
     if (els.prevDay) {

@@ -97,6 +97,96 @@ h1 {
   gap: 0.8rem;
 }
 
+.filter-bar {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.filter-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.filter-title {
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.clear-filters-btn {
+  font-size: 0.82rem;
+  padding: 0.35rem 0.65rem;
+}
+
+.filter-menu {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.filter-chip {
+  appearance: none;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--ink);
+  background: #fff;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.32rem 0.62rem;
+  cursor: pointer;
+  transition: opacity 120ms ease, filter 120ms ease;
+}
+
+.filter-chip:hover {
+  filter: brightness(0.98);
+}
+
+.filter-chip.is-inactive {
+  opacity: 0.4;
+  background: #fff;
+  border-color: var(--line);
+  color: #58718a;
+}
+
+.filter-adult-classes {
+  background: #effbf5;
+  border-color: #b6d7c8;
+  color: #0a5138;
+}
+
+.filter-available-rentals {
+  background: #73afe8;
+  border-color: #5b97da;
+  color: #ffffff;
+}
+
+.filter-private-events {
+  background: #eef2f7;
+  border-color: #c8d2de;
+  color: #2f3e4f;
+}
+
+.filter-youth-classes {
+  background: #ffe8c9;
+  border-color: #efbe7a;
+  color: #6e3f00;
+}
+
+.filter-adult-dropins {
+  background: #efe4ff;
+  border-color: #ceb4f3;
+  color: #4b2f78;
+}
+
+.filter-teen-dropins {
+  background: #fde2e2;
+  border-color: #f4b4b4;
+  color: #8b1d1d;
+}
+
 .live-note {
   margin: 0;
   color: var(--muted);

@@ -10,7 +10,7 @@
       href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./styles.css?v=20260301-12" />
+    <link rel="stylesheet" href="./styles.css?v=20260301-13" />
   </head>
   <body>
     <main class="layout">
@@ -31,6 +31,20 @@
           <button id="prev-day" class="nav-btn" type="button" aria-label="Previous day">&larr;</button>
           <button id="next-day" class="nav-btn" type="button" aria-label="Next day">&rarr;</button>
           <button id="today-day" class="nav-btn today-btn" type="button">Today</button>
+        </div>
+        <div class="filter-bar">
+          <div class="filter-header">
+            <span class="filter-title">Filters</span>
+            <button id="clear-filters" class="nav-btn clear-filters-btn" type="button">Clear All</button>
+          </div>
+          <div class="filter-menu" id="filter-menu">
+            <button type="button" class="filter-chip filter-adult-classes is-active" data-filter-key="adultClasses">Adult Classes</button>
+            <button type="button" class="filter-chip filter-available-rentals is-active" data-filter-key="availableRentals">Available Rentals</button>
+            <button type="button" class="filter-chip filter-private-events is-active" data-filter-key="privateEventsRentals">Private Events & Rentals</button>
+            <button type="button" class="filter-chip filter-youth-classes is-active" data-filter-key="youthClasses">Youth Classes</button>
+            <button type="button" class="filter-chip filter-adult-dropins is-active" data-filter-key="adultDropIns">Adult Drop-Ins</button>
+            <button type="button" class="filter-chip filter-teen-dropins is-active" data-filter-key="teenDropIns">Teen Drop Ins</button>
+          </div>
         </div>
       </section>
 
@@ -56,6 +70,6 @@
       </section>
     </main>
 
-    <script src="./app.js?v=20260301-12"></script>
+    <script src="./app.js?v=20260301-13"></script>
   </body>
 </html>
