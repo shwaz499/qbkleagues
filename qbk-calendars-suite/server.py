@@ -31,6 +31,7 @@ APP_ROUTE_DIRS = {
     "/adult-dropins-week": REPO_ROOT / "qbk-weekly-adult-dropins-calendar",
     "/teen-dropins-week": REPO_ROOT / "qbk-weekly-teen-dropins-calendar",
     "/youth-week": REPO_ROOT / "qbk-weekly-youth-programs-calendar",
+    "/league-page": PROJECT_DIR / "qbk-league-page",
 }
 BOOKING_ROOT = "https://apps.daysmartrecreation.com/dash/x/#/online/qbksports"
 API_BASE = os.getenv("DASH_API_BASE", "https://api.dashplatform.com").rstrip("/")
